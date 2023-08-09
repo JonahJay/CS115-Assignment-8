@@ -1,0 +1,53 @@
+;; * * * * * * * * * * * * *     
+;; Jonah Jay  
+;; CS 115 Fall 2020    
+;; Assignment 08, Question 1    
+;; * * * * * * * * * * * * *
+
+;; * * * * * * * * * * * * *
+;; Question 1a)
+;; * * * * * * * * * * * * *
+
+;; (just-one? lst pred) consumes a list of values and a predicate which can
+;; operate on those values and produces a boolean value based on if there is only one value
+;; that satisfies the pred
+;; just-one?: (listof any) (any -> Bool) -> Bool
+;; Example;
+(check-expect (just-one? (list 3 6 8 10) odd?) true)
+(check-expect (just-one? (list 2 3 6 7) even?) false)
+
+(define (just-one? lst pred)
+  (cond
+    [(= (length (filter pred lst)) 1) true]
+    [else false]))
+
+;; Tests
+(check-expect (just-one? (list 2 4 8 10) odd?) false)
+(check-expect (just-one? (list 3 4 7 10) odd?) false)
+(check-expect (just-one? (list "hi" "elongated" "truncated" "short") (lambda (s) (<= (string-length s) 5))) false)
+(check-expect (just-one? (list 2 4 7 10) odd?) true)
+(check-expect (just-one? (list "hi" "elongated" "truncated") (lambda (s) (<= (string-length s) 5))) true)
+
+
+;; * * * * * * * * * * * * *
+;; Question 1b)
+;; * * * * * * * * * * * * *
+
+;; (all-but-one? lst pred) consumes a list of values and a predicate which can
+;; operate on those values and produces a boolean value based on if there is
+;; exactly all of the values in the list, except for exactly one that satisfies the pred
+;; all-but-one?: (listof any) (any -> Bool) -> Bool
+;; Example;
+(check-expect (all-but-one? (list 3 6 8 10) even?) true)
+(check-expect (all-but-one? (list 2 3 6 7) even?) false)
+
+(define (all-but-one? lst pred)
+  (cond
+    [(= (length (filter pred lst)) (- (length lst) 1)) true]
+    [else false]))
+
+;; Tests
+(check-expect (all-but-one? (list 3 6 8 10 15) odd?) false)
+(check-expect (all-but-one? (list 3 5 7 11 15) odd?) false)
+(check-expect (all-but-one? (list 3 5 7 12 15) odd?) true)
+(check-expect (all-but-one? (list "hi" "elongated" "truncated" "short") (lambda (s) (< 3 (string-length s)))) true)
