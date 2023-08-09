@@ -1,0 +1,50 @@
+;; * * * * * * * * * * * * *     
+;; Jonah Jay  
+;; CS 115 Fall 2020    
+;; Assignment 08, Question 3    
+;; * * * * * * * * * * * * *
+
+;; * * * * * * * * * * * * *
+;; Question 3a)
+;; * * * * * * * * * * * * *
+
+;; (keep-last lst) consumes a list of any value
+;; and produces a list which keeps the last occurrence of each element in the list
+;; keep-last: (listof any) -> (listof any)
+;; Example;
+(check-expect (keep-last (list "b" 2 true "b" 7 2))(list #true "b" 7 2))
+
+(define (keep-last lst)
+  (foldr (lambda (cur rec)
+           (cond
+             [(member? cur rec) rec]
+             [else (cons cur rec)])) empty lst))
+
+;; Tests
+(check-expect (keep-last (list 3 "a" 2 true 1 7 true 3))(list "a" 2 1 7 #true 3))
+(check-expect (keep-last (list 1 1 1 1 1 1 1 1 1 1 1 1))(list 1))
+(check-expect (keep-last (list "a" 'b 23 false "b" 32 true))(list "a" 'b 23 #false "b" 32 #true))
+
+;; * * * * * * * * * * * * *
+;; Question 3b)
+;; * * * * * * * * * * * * *
+
+;; (keep-singles lst) consumes a list of any value
+;; and produces a list which  keeps only those elements that occur only once in the list
+;; keep-singles: (listof any) -> (listof any)
+;; Example;
+(check-expect (keep-singles (list 1 2 2 3 4 2 4 'red 'blue 'red 4)) (list 1 3 'blue))
+
+(define (keep-singles lst)
+  (filter (lambda (x)
+            (equal?
+             (foldr (lambda (cur rec)
+                      (cond
+                        [(equal? cur x) (add1 rec)]
+                        [else rec])) 0 lst) 1)) lst))
+
+;; Tests
+(check-expect (keep-singles (list 1 1 1 1 1 1 1 1)) (list ))
+(check-expect (keep-singles (list 1 1 1 1 1 1 1 2)) (list 2))
+(check-expect (keep-singles (list 1 "Hello" 'hi 2 true false)) (list 1 "Hello" 'hi 2 true false))
+
